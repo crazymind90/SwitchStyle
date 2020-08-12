@@ -81,9 +81,8 @@ id ObjectForKeys(NSString *Key) {
 %ctor {
 
 
-	NSString *PlistPath = @"/var/mobile/Library/Preferences/com.crazymind90.switchstyle.plist";
 
-	NSMutableDictionary *MutDoction = [[NSMutableDictionary alloc] initWithContentsOfFile:PlistPath];
+	NSMutableDictionary *MutDoction = [[NSMutableDictionary alloc] initWithContentsOfFile:PLIST_PATH];
 
 	bool EnableStyle = [[MutDoction objectForKey:@"EnableStyle"] boolValue];
 	bool Customizer = [[MutDoction objectForKey:@"Customizer"] boolValue];
