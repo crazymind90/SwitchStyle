@@ -2,7 +2,7 @@ PACKAGE_VERSION = $(THEOS_PACKAGE_BASE_VERSION)
 
 ARCHS = arm64e arm64 armv7 armv7s
 
-THEOS_DEVICE_IP = 192.168.1.13
+THEOS_DEVICE_IP = 192.168.1.4
 
 include $(THEOS)/makefiles/common.mk
 
@@ -21,5 +21,7 @@ after-install::
 SUBPROJECTS += SwitchStyle
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
-install2::
-		install2.exec
+
+install3::
+		install3.exec
+

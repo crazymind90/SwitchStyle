@@ -14,12 +14,6 @@
 
 #define PLIST_PATH @"/var/mobile/Library/Preferences/com.crazymind90.switchstyle.plist"
 
-inline bool GetPrefBool(NSString *key) {
-
-		return [[[NSDictionary dictionaryWithContentsOfFile:PLIST_PATH] valueForKey:key] boolValue];
-
-}
-
 
 
 id ObjectForKeys(NSString *Key) {
@@ -37,23 +31,21 @@ id ObjectForKeys(NSString *Key) {
 
 
 %hook UISwitchModernVisualElement
+
+%group EnableStyle
 -(UIImage *) _effectiveThumbImage {
 
-  if(GetPrefBool(@"EnableStyle")) {
 
 	 return NULL; //[UIImage imageNamed:@"/var/CC@2x.png"];
 
 }
-
- return %orig;
-
-}
+%end
 
 
+%group Customizer
 -(UIColor *) _effectiveOnTintColor {
 
-  if (GetPrefBool(@"Customizer")) {
-   // Switch is ON
+    // Switch is ON
 
 	 NSString *BackGroundPref = ObjectForKeys(@"ONBackGround");
 
@@ -61,26 +53,59 @@ id ObjectForKeys(NSString *Key) {
 
    return BackGroundColors;
 
-    }
-
-   return %orig;
 }
+
 
 -(UIColor *) _effectiveTintColor {
 
-  if (GetPrefBool(@"Customizer")) {
-   // Switch is OFF
+    // Switch is OFF
 
 	 NSString *BackGroundPref =  ObjectForKeys(@"OFFBackGround");
 
 	 UIColor *BackGroundColors = LCPParseColorString(BackGroundPref, @"#ff0000");
 
+
    return BackGroundColors;
 
-    }
+}
 
-   return %orig;
+%end
+%end
+
+
+
+
+
+
+
+%ctor {
+
+
+	NSString *PlistPath = @"/var/mobile/Library/Preferences/com.crazymind90.switchstyle.plist";
+
+	NSMutableDictionary *MutDoction = [[NSMutableDictionary alloc] initWithContentsOfFile:PlistPath];
+
+	bool EnableStyle = [[MutDoction objectForKey:@"EnableStyle"] boolValue];
+	bool Customizer = [[MutDoction objectForKey:@"Customizer"] boolValue];
+
+
+	if (EnableStyle)
+		%init(EnableStyle);
+
+		if (Customizer)
+			%init(Customizer);
+
+
 }
 
 
-%end
+
+
+
+
+
+
+
+
+
+//
